@@ -14,4 +14,4 @@ dependencies = [
 Documentation = "https://github.com/Harry-icl/zero-determinant-trading/wiki"
 
 [project.scripts]
-simulate_market = "zdt_simulator.scripts.simulate_market:simulate_market"
+simulate_simple_market = "zdt_simulator.scripts.simulate_simple_market:simulate_simple_market"

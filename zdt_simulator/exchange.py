@@ -30,14 +30,18 @@ class Exchange:
         order_sequence = np.random.choice(self.participants,
                                           size=len(self.participants),
                                           replace=False, p=self.r)
+        current_round = []
 
         for player in order_sequence:
-            next_move = player.get_next_action(self.previous_round)
+            next_move = player.get_next_action(self.previous_round.copy()
+                                               if self.previous_round
+                                               else None)
+            current_round.append(next_move)
             # Player knows what their previous round was, so they can remove
             # that from the play list themselves
             if next_move == AA:
                 bids[1].append(player)
-                if len(best_bid[0]) > 0:
+                if len(bids[0]) > 0:
                     best_bidder = bids[0].popleft()
                     best_bidder.pnl += self.K
                     best_bidder.position += 1
@@ -74,8 +78,20 @@ class Exchange:
         elif len(asks[1]) > 0:
             asks[1][0].pnl += self.T + self.K
             asks[1][0].position -= 1
+        
+        self.previous_round = current_round
 
     def run_simulation(self, rounds: int = 100):
-        history = [[participant.pnl for participant in self.participants]]
-        for round in range(rounds):
-            pass
+        pnl_history = np.empty((rounds + 1, len(self.participants)))
+        position_history = np.empty((rounds + 1, len(self.participants)))
+        pnl_history[0] = [participant.pnl for participant in self.participants]
+        position_history[0] = [participant.position
+                               for participant in self.participants]
+        for round in range(1, rounds + 1):
+            self._run_round()
+            pnl_history[round] = [participant.pnl
+                                  for participant in self.participants]
+            position_history[round] = [participant.position
+                                       for participant in self.participants]
+        
+        return pnl_history, position_history
