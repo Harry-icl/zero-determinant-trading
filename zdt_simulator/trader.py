@@ -27,6 +27,7 @@ class Trader:
         self.pN = np.ones(9) - pAA - pAB
         self.speed = speed
         self.pnl = 0
+        self.position = 0
 
     def get_next_action(self, prev_self_action: Action,
                         prev_opp_action: Action):

@@ -2,17 +2,16 @@
 name = "zero-determinant-trading"
 version = "2023.0"
 description="""Probabilistic market making simulator."""
-license = "MIT"
+#license="MIT"
 authors = [
     { name = "Harrison R. Mouat", email = "harrison.mouat19@imperial.ac.uk" },
 ]
 dependencies = [
-    "numpy",
-    
+    "numpy"
 ]
 
 [project.urls]
-Documentation = ""
+Documentation = "https://github.com/Harry-icl/zero-determinant-trading/wiki"
 
 [project.scripts]
-simulate_market = "simulator.scripts.simulate_market:simulate_market"
+simulate_market = "zdt_simulator.scripts.simulate_market:simulate_market"
