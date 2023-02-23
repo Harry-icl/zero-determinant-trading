@@ -2,7 +2,7 @@ from typing import List
 import numpy as np
 
 from .trader import Trader
-from .actions import Action
+from .actions.Action import AA, AB, N
 
 
 class Exchange:
@@ -21,9 +21,12 @@ class Exchange:
         order_sequence = np.random.choice(self.participants,
                                           size=len(self.participants),
                                           replace=False, p=self.r)
+
         for player in order_sequence:
             next_move = player.get_next_action(self.previous_round)
-            
+            if next_move == 
+            # Player knows what their previous round was, so they can remove
+            # that from the play list themselves
 
 
     def run_simulation(self, rounds: int = 100):
