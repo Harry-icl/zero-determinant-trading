@@ -38,6 +38,7 @@ class Trader:
         self.position = 0
         self.previous_action = None
 
+        # Possible previous rounds
         prev_round_list = [
             (my_action, tuple(sorted(other_actions)))
             for my_action, other_actions in product(

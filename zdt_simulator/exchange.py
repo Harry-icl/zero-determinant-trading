@@ -65,19 +65,23 @@ class Exchange:
                 bids[1].append(player)
                 asks[1].append(player)
 
+        # External seller
         if len(bids[0]) > 0:
-            bids[0][0].pnl += self.K
-            bids[0][0].position += 1
+            best_bidder = bids[0].popleft()
+            best_bidder.pnl += self.K
         elif len(bids[1]) > 0:
-            bids[1][0].pnl += self.T + self.K
-            bids[1][0].position += 1
+            best_bidder = bids[1].popleft()
+            best_bidder.pnl += self.T + self.K
+        best_bidder.position += 1
         
+        # External buyer
         if len(asks[0]) > 0:
-            asks[0][0].pnl += self.K
-            asks[0][0].position -= 1
+            best_asker = asks[0].popleft()
+            best_asker.pnl += self.K
         elif len(asks[1]) > 0:
-            asks[1][0].pnl += self.T + self.K
-            asks[1][0].position -= 1
+            best_asker = asks[1].popleft()
+            best_asker.pnl += self.T + self.K
+        best_asker.position -= 1
         
         self.previous_round = current_round
 

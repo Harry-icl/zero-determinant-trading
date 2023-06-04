@@ -15,3 +15,4 @@ Documentation = "https://github.com/Harry-icl/zero-determinant-trading/wiki"
 
 [project.scripts]
 simulate_simple_market = "zdt_simulator.scripts.simulate_simple_market:simulate_simple_market"
+simulate_custom_market = "zdt_simulator.scripts.simulate_custom_market:simulate_custom_market"
