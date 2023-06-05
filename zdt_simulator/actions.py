@@ -8,7 +8,7 @@ class Action(Enum):
 
     def __lt__(self, other):
         return self.name < other.name
-    
+
     def __le__(self, other):
         return self.name <= other.name
 

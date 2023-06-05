@@ -1,7 +1,6 @@
 #! /usr/bin/env python
 from zdt_simulator import Exchange, Trader
 from argparse import ArgumentParser
-from itertools import combinations_with_replacement
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -15,7 +14,7 @@ def simulate_custom_market():
     parser.add_argument("strategies", type=str, nargs="+",
                         help=("the filepaths of the csv file containing each p"
                               "layer's strategy"))
-    
+
     parser.add_argument("-r", type=str, nargs=1, required=False,
                         help="the filepath of the csv file containing r vals")
 
@@ -24,8 +23,9 @@ def simulate_custom_market():
                               "e order as the pAA/pAB/r values"))
 
     parser.add_argument("-a", "--average", action="store_true",
-                        help=("plot the average payoff per round instead of the cumulative"))
-                    
+                        help=("plot the average payoff per round instead of th"
+                              "e cumulative"))
+
     parser.add_argument("--rounds", type=int, required=False)
 
     args = parser.parse_args()
@@ -47,7 +47,7 @@ def simulate_custom_market():
         names = args.names
     else:
         names = [f'player_{i}' for i in range(1, player_count + 1)]
-    
+
     if len(names) != player_count:
         raise ValueError(f"Number of player names was {len(names)} but size of"
                          f" size of pAA suggests {player_count} players.")
@@ -62,11 +62,15 @@ def simulate_custom_market():
     pnl_history, position_history = exchange.run_simulation(rounds=rounds)
 
     if args.average:
-        pnl_history = np.array([pnl_history[0]] + [pnl / i for i, pnl in enumerate(pnl_history) if i != 0])
-    
+        pnl_history = np.array([pnl_history[0]] +
+                               [pnl / i
+                                for i, pnl in enumerate(pnl_history)
+                                if i != 0])
+
     for i, player in enumerate(players):
         print(player)
-        plt.plot(pnl_history[:, i], label=f"{player.name}: {pnl_history[-1, i]}")
+        plt.plot(pnl_history[:, i],
+                 label=f"{player.name}: {pnl_history[-1, i]}")
     plt.legend()
     plt.xlabel("Round")
     plt.ylabel("Average PnL") if args.average else plt.ylabel("PnL")

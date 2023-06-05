@@ -28,7 +28,7 @@ def simulate_simple_market():
     players = [Trader(p_initial, pAA, pAB, player_count)
                for _ in range(player_count)]
     r = np.ones(player_count) / player_count
-    
+
     exchange = Exchange(players, r)
 
     pnl_history, position_history = exchange.run_simulation()

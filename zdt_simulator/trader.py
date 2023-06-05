@@ -1,5 +1,4 @@
 import numpy as np
-from math import comb
 from itertools import product, combinations_with_replacement, count
 from typing import List
 
@@ -26,7 +25,7 @@ class Trader:
 
         if name is None:
             name = f"Player {next(self._ids)}"
-        
+
         self.name = name
         self.p_initial = p_initial
         self.pAA = pAA
@@ -53,7 +52,7 @@ class Trader:
             raise ValueError(f"Length of pAA and pAB was {len(pAA)}, expected "
                              f"{len(self.prev_round_idx_map)} given player_cou"
                              f"nt")
-    
+
     def __str__(self):
         trader_str = f"Trader {self.name}\nprevious round\tpAA\tpAB\n"
         for k, i in self.prev_round_idx_map.items():
@@ -65,7 +64,7 @@ class Trader:
 
     def get_next_action(self, previous_round: List[Action]):
         if previous_round is None:
-            p=self.p_initial
+            p = self.p_initial
         else:
             previous_round.remove(self.previous_action)
             idx = self.prev_round_idx_map[(self.previous_action,

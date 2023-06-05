@@ -25,8 +25,8 @@ class Exchange:
         asks = (deque(), deque())
         # best_bid, best_ask will store a tuple of lists, both have the first
         # list containing the players who bid/ask the midpoint price S, and the
-        # second list containing the players who bid/ask S+/-T, this is to allow
-        # the simulator to implement price-time priority
+        # second list containing the players who bid/ask S+/-T, this is to
+        # allow the simulator to implement price-time priority
         order_sequence = np.random.choice(self.participants,
                                           size=len(self.participants),
                                           replace=False, p=self.r)
@@ -49,7 +49,7 @@ class Exchange:
                     player.position -= 1
                 else:
                     asks[0].append(player)
-            
+
             elif next_move == AB:
                 asks[1].append(player)
                 if len(asks[0]) > 0:
@@ -60,7 +60,7 @@ class Exchange:
                     player.position += 1
                 else:
                     bids[0].append(player)
-            
+
             elif next_move == N:
                 bids[1].append(player)
                 asks[1].append(player)
@@ -74,7 +74,7 @@ class Exchange:
             best_bidder = bids[1].popleft()
             best_bidder.pnl += self.T + self.K
             best_bidder.position += 1
-        
+
         # External buyer
         if len(asks[0]) > 0:
             best_asker = asks[0].popleft()
@@ -84,7 +84,7 @@ class Exchange:
             best_asker = asks[1].popleft()
             best_asker.pnl += self.T + self.K
             best_asker.position -= 1
-        
+
         self.previous_round = current_round
 
     def run_simulation(self, rounds: int = 100):
@@ -99,5 +99,5 @@ class Exchange:
                                   for participant in self.participants]
             position_history[round] = [participant.position
                                        for participant in self.participants]
-        
+
         return pnl_history, position_history
