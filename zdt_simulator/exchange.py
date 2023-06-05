@@ -69,19 +69,21 @@ class Exchange:
         if len(bids[0]) > 0:
             best_bidder = bids[0].popleft()
             best_bidder.pnl += self.K
+            best_bidder.position += 1
         elif len(bids[1]) > 0:
             best_bidder = bids[1].popleft()
             best_bidder.pnl += self.T + self.K
-        best_bidder.position += 1
+            best_bidder.position += 1
         
         # External buyer
         if len(asks[0]) > 0:
             best_asker = asks[0].popleft()
             best_asker.pnl += self.K
+            best_asker.position -= 1
         elif len(asks[1]) > 0:
             best_asker = asks[1].popleft()
             best_asker.pnl += self.T + self.K
-        best_asker.position -= 1
+            best_asker.position -= 1
         
         self.previous_round = current_round
 

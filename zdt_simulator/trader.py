@@ -12,8 +12,7 @@ AA, AB, N = Action.AA, Action.AB, Action.N
 class Trader:
     _ids = count(1)
 
-    def __init__(self, p_initial, pAA, pAB, player_count, speed: float = 1,
-                 name=None):
+    def __init__(self, p_initial, pAA, pAB, player_count, name=None):
         if np.max(pAA + pAB) > 1 + 1e-6:
             raise ValueError("pAA + pAB must be less than or equal to 1.")
         if np.min((np.min(pAA), np.min(pAB))) < 0:
@@ -33,7 +32,6 @@ class Trader:
         self.pAA = pAA
         self.pAB = pAB
         self.pN = np.ones(len(pAA)) - pAA - pAB
-        self.speed = speed
         self.pnl = 0
         self.position = 0
         self.previous_action = None
@@ -53,8 +51,17 @@ class Trader:
         }
         if len(pAA) != len(self.prev_round_idx_map):
             raise ValueError(f"Length of pAA and pAB was {len(pAA)}, expected "
-                             f"{len(self.prev_round_idx_map)} given "
-                             f"player_count")
+                             f"{len(self.prev_round_idx_map)} given player_cou"
+                             f"nt")
+    
+    def __str__(self):
+        trader_str = f"Trader {self.name}\nprevious round\tpAA\tpAB\n"
+        for k, i in self.prev_round_idx_map.items():
+            trader_str += str(tuple([str(k[0]), tuple(str(x) for x in k[1])]))
+            trader_str += "\t"
+            trader_str += str(self.pAA[i]) + "\t" + str(self.pAB[i]) + "\n"
+
+        return trader_str
 
     def get_next_action(self, previous_round: List[Action]):
         if previous_round is None:
