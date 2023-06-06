@@ -25,12 +25,15 @@ def simulate_custom_market():
     parser.add_argument("-a", "--average", action="store_true",
                         help=("plot the average payoff per round instead of th"
                               "e cumulative"))
+    
+    parser.add_argument("-s", "--seaborn", action="store_true",
+                        help="plot using seaborn instead of matplotlib")
 
     parser.add_argument("--rounds", type=int, required=False)
 
     args = parser.parse_args()
     filepaths = args.strategies
-    rounds = args.rounds if args.rounds is not None else 100
+    rounds = args.rounds if args.rounds is not None else 10000
 
     probabilities = [np.genfromtxt(filepath, delimiter=',')
                      for filepath in filepaths]
@@ -67,20 +70,40 @@ def simulate_custom_market():
                                 for i, pnl in enumerate(pnl_history)
                                 if i != 0])
 
-    for i, player in enumerate(players):
-        print(player)
-        plt.plot(pnl_history[:, i],
-                 label=f"{player.name}: {pnl_history[-1, i]}")
-    plt.legend()
-    plt.xlabel("Round")
-    plt.ylabel("Average PnL") if args.average else plt.ylabel("PnL")
-    plt.show()
+    if args.seaborn:
+        import seaborn as sns
+        sns.set()
+        for i, player in enumerate(players):
+            print(player)
+            sns.lineplot(pnl_history[:, i],
+                         label=f"{player.name}: {pnl_history[-1, i]}")
+        plt.legend()
+        plt.xlabel("Round")
+        plt.ylabel("Average PnL per round") if args.average else plt.ylabel("PnL")
+        plt.show()
 
-    for i, player in enumerate(players):
-        plt.plot(position_history[:, i], label=player.name)
-    plt.legend()
-    plt.xlabel("Round")
-    plt.ylabel("Position")
-    plt.show()
+        for i, player in enumerate(players):
+            sns.lineplot(position_history[:, i], label=player.name)
+        plt.legend()
+        plt.xlabel("Round")
+        plt.ylabel("Position")
+        plt.show()
+    
+    else:
+        for i, player in enumerate(players):
+            print(player)
+            plt.plot(pnl_history[:, i],
+                    label=f"{player.name}: {pnl_history[-1, i]}")
+        plt.legend()
+        plt.xlabel("Round")
+        plt.ylabel("Average PnL per round") if args.average else plt.ylabel("PnL")
+        plt.show()
+
+        for i, player in enumerate(players):
+            plt.plot(position_history[:, i], label=player.name)
+        plt.legend()
+        plt.xlabel("Round")
+        plt.ylabel("Position")
+        plt.show()
 
     print("Final PnLs:", pnl_history[-1])
