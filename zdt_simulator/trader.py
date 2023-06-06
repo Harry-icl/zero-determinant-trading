@@ -34,6 +34,7 @@ class Trader:
         self.pnl = 0
         self.position = 0
         self.previous_action = None
+        self.previous_payoff = 0
 
         # Possible previous rounds
         prev_round_list = [
@@ -44,6 +45,9 @@ class Trader:
                                               player_count - 1)
             )
         ]
+
+        self.round_count = 0
+        self.estimated_Si = np.zeros(len(prev_round_list))
         self.prev_round_idx_map = {
             prev_round: i
             for i, prev_round in enumerate(sorted(prev_round_list))
@@ -62,6 +66,10 @@ class Trader:
 
         return trader_str
 
+    def pnl_change(self, amount):
+        self.previous_payoff += amount
+        self.pnl += amount
+
     def get_next_action(self, previous_round: List[Action]):
         if previous_round is None:
             p = self.p_initial
@@ -70,5 +78,10 @@ class Trader:
             idx = self.prev_round_idx_map[(self.previous_action,
                                            tuple(sorted(previous_round)))]
             p = [self.pAA[idx], self.pAB[idx], self.pN[idx]]
+            self.estimated_Si[idx] = ((self.round_count*self.estimated_Si[idx]
+                                       + self.previous_payoff)
+                                      / (self.round_count + 1))
+            self.previous_payoff = 0
+        self.round_count += 1
         self.previous_action = np.random.choice([AA, AB, N], p=p)
         return self.previous_action
