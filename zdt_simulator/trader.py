@@ -46,7 +46,7 @@ class Trader:
             )
         ]
 
-        self.round_count = 0
+        self.round_count = np.zeros(len(prev_round_list))
         self.estimated_Si = np.zeros(len(prev_round_list))
         self.prev_round_idx_map = {
             prev_round: i
@@ -78,10 +78,10 @@ class Trader:
             idx = self.prev_round_idx_map[(self.previous_action,
                                            tuple(sorted(previous_round)))]
             p = [self.pAA[idx], self.pAB[idx], self.pN[idx]]
-            self.estimated_Si[idx] = ((self.round_count*self.estimated_Si[idx]
+            self.estimated_Si[idx] = ((self.round_count[idx]*self.estimated_Si[idx]
                                        + self.previous_payoff)
-                                      / (self.round_count + 1))
+                                      / (self.round_count[idx] + 1))
             self.previous_payoff = 0
-        self.round_count += 1
+            self.round_count[idx] += 1
         self.previous_action = np.random.choice([AA, AB, N], p=p)
         return self.previous_action

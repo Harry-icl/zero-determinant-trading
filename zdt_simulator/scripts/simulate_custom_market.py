@@ -69,6 +69,10 @@ def simulate_custom_market():
                                [pnl / i
                                 for i, pnl in enumerate(pnl_history)
                                 if i != 0])
+        position_history = np.array([position_history[0]] +
+                                    [position / i
+                                     for i, position in enumerate(position_history)
+                                     if i != 0])
 
     if args.seaborn:
         import seaborn as sns
@@ -86,7 +90,7 @@ def simulate_custom_market():
             sns.lineplot(position_history[:, i], label=player.name)
         plt.legend()
         plt.xlabel("Round")
-        plt.ylabel("Position")
+        plt.ylabel("Average position change per round") if args.average else plt.ylabel("Position")
         plt.show()
     
     else:
@@ -103,7 +107,7 @@ def simulate_custom_market():
             plt.plot(position_history[:, i], label=player.name)
         plt.legend()
         plt.xlabel("Round")
-        plt.ylabel("Position")
+        plt.ylabel("Average position change per round") if args.average else plt.ylabel("Position")
         plt.show()
 
     print("Final PnLs:", pnl_history[-1])
